@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VacayHome – Khách Sạn 5 Sao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ╔══════════════════════════════════════════════╗
+   ║  NGƯỜI 1 — CSS: Reset · Tokens · Components  ║
+   ║  Giao diện + Điều hướng hệ thống             ║
+   ╚══════════════════════════════════════════════╝ */
+
+/* ── Reset & Design Tokens ── */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#b8952a;--gold-l:#d4af50;--gold-xl:#f0d080;
+  --ink:#0c0b09;--ink2:#1a1814;--ink3:#252320;--ink4:#312f2b;
+  --surface:#2e2c28;--border:#3d3b36;--border2:#4d4b45;
+  --text:#f2ede6;--text2:#b0aa9f;--text3:#7a756d;
+  --ok:#2ecc71;--err:#e74c3c;--info:#3498db;
+  --r:12px;--shadow:0 20px 60px rgba(0,0,0,.5);
+  --transition:.22s cubic-bezier(.4,0,.2,1);
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--ink);color:var(--text);overflow-x:hidden}
+button,input,select,textarea{font-family:'Outfit',sans-serif}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--ink2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+/* ── Typography ── */
+.serif{font-family:'Cormorant Garamond',serif}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600}
+
+/* ── Utilities ── */
+.hidden{display:none!important}
+.flex{display:flex;align-items:center}
+.flex-col{display:flex;flex-direction:column}
+.gap4{gap:4px}.gap8{gap:8px}.gap12{gap:12px}.gap16{gap:16px}.gap20{gap:20px}.gap24{gap:24px}
+.mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}
+.mb4{margin-bottom:4px}.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}
+.text-gold{color:var(--gold-l)}.text-dim{color:var(--text2);font-size:13px}.text-sm{font-size:13px}.text-xs{font-size:11px}
+.fw600{font-weight:600}.w100{width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;transition:var(--transition);white-space:nowrap;text-decoration:none}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--ink);letter-spacing:.3px}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(184,149,42,.4)}
+.btn-gold:active{transform:translateY(0)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.btn-outline:hover{border-color:var(--gold-l);color:var(--gold-l)}
+.btn-ghost{background:transparent;color:var(--text2);border:none}
+.btn-ghost:hover{color:var(--text)}
+.btn-danger{background:#e74c3c20;color:#e74c3c;border:1px solid #e74c3c40}
+.btn-danger:hover{background:#e74c3c;color:#fff}
+.btn-success{background:#2ecc7120;color:#2ecc71;border:1px solid #2ecc7140}
+.btn-success:hover{background:#2ecc71;color:#fff}
+.btn-info{background:#3498db20;color:#3498db;border:1px solid #3498db40}
+.btn-info:hover{background:#3498db;color:#fff}
+.btn-sm{padding:6px 14px;font-size:13px}.btn-xs{padding:4px 10px;font-size:12px}
+.btn-block{width:100%;justify-content:center;padding:13px 0}
+
+/* ── Forms ── */
+.form-group{margin-bottom:15px}
+.label{display:block;font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+.input{width:100%;padding:10px 14px;background:var(--ink3);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;outline:none;transition:border-color var(--transition)}
+.input:focus{border-color:var(--gold-l)}
+.input::placeholder{color:var(--text3)}
+.input-icon{position:relative}
+.input-icon .input{padding-left:38px}
+.input-icon .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px}
+textarea.input{resize:vertical;min-height:90px}
+select.input{cursor:pointer}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.card-pad{padding:22px}
+
+/* ── Badges ── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.badge-ok{background:#2ecc7120;color:#2ecc71;border:1px solid #2ecc7140}
+.badge-err{background:#e74c3c20;color:#e74c3c;border:1px solid #e74c3c40}
+.badge-warn{background:#f39c1220;color:#f39c12;border:1px solid #f39c1240}
+.badge-info{background:#3498db20;color:#3498db;border:1px solid #3498db40}
+.badge-dim{background:var(--ink3);color:var(--text3);border:1px solid var(--border)}
+.badge-gold{background:rgba(184,149,42,.2);color:var(--gold-l);border:1px solid rgba(184,149,42,.3)}
+
+/* ── Tables ── */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--ink3)}
+th{padding:11px 16px;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.7px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:13px 16px;font-size:13.5px;border-bottom:1px solid var(--border)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--ink3)}
+
+/* ── Modals ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.show{opacity:1;pointer-events:all}
+.modal{background:var(--ink2);border:1px solid var(--border2);border-radius:18px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;transform:translateY(20px);transition:transform .25s;box-shadow:var(--shadow)}
+.overlay.show .modal{transform:translateY(0)}
+.modal-hd{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between}
+.modal-bd{padding:22px 28px 30px}
+.modal-title{font-size:20px}
+
+/* ── Misc components ── */
+.divider{height:1px;background:var(--border);margin:18px 0}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;background:var(--ink3);border:1px solid var(--border);border-radius:99px;font-size:11.5px;color:var(--text2)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.price-display{background:var(--ink3);border:1px solid var(--border2);border-radius:10px;padding:14px 18px}
+
+/* ── Toast ── */
+#toast-wrap{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{pointer-events:all;display:flex;align-items:center;gap:12px;padding:13px 18px;border-radius:11px;font-size:14px;font-weight:500;min-width:260px;max-width:360px;box-shadow:0 10px 40px rgba(0,0,0,.4);animation:toastIn .3s ease forwards}
+.toast-ok{background:#1a3d2e;color:#2ecc71;border:1px solid #2ecc7130}
+.toast-err{background:#3d1a1a;color:#e74c3c;border:1px solid #e74c3c30}
+.toast-info{background:#1a2d3d;color:#3498db;border:1px solid #3498db30}
+@keyframes toastIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes toastOut{to{transform:translateX(110%);opacity:0}}
+
+/* ── Sidebar & Navigation ── */
+.sidebar{width:250px;flex-shrink:0;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 14px;min-height:100vh}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:9px;color:var(--text2);cursor:pointer;transition:var(--transition);font-size:14px;font-weight:500;border:none;background:none;width:100%;text-align:left;margin-bottom:2px}
+.nav-item:hover{background:var(--surface);color:var(--text)}
+.nav-item.active{background:rgba(184,149,42,.15);color:var(--gold-l);border-left:3px solid var(--gold)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold-l);letter-spacing:1px;text-align:center;padding:8px 0 20px}
+.logo span{color:var(--text3);font-weight:400}
+
+/* ── Pages ── */
+.page{display:none;flex-direction:column;flex:1;overflow-y:auto}
+.page.active{display:flex}
+.page-inner{padding:30px 36px;flex:1}
+.page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px}
+.page-hd h2{font-size:26px;margin-bottom:3px}
+.page-hd p{color:var(--text2);font-size:13px}
+
+/* ── Stat cards (Dashboard) ── */
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px}
+.stat-icon{font-size:30px;margin-bottom:12px}
+.stat-val{font-size:28px;font-weight:700;font-family:'Cormorant Garamond',serif;margin-bottom:4px}
+.stat-lbl{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.stat-sub{font-size:12px;color:var(--text3)}
+.progress{height:6px;background:var(--ink3);border-radius:99px;overflow:hidden;margin-top:8px}
+.progress-bar{height:100%;border-radius:99px;transition:width .5s ease}
+
+/* ── Room cards ── */
+.room-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.room-card:hover{transform:translateY(-5px);box-shadow:0 24px 50px rgba(0,0,0,.45)}
+.room-img{height:190px;overflow:hidden;position:relative}
+.room-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.room-card:hover .room-img img{transform:scale(1.06)}
+.room-info{padding:18px}
+
+/* ── Booking steps ── */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:26px}
+.step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text3)}
+.step.done,.step.active{color:var(--gold-l)}
+.step-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;transition:var(--transition)}
+.step.active .step-dot{border-color:var(--gold-l);background:rgba(184,149,42,.15);color:var(--gold-l)}
+.step.done .step-dot{border-color:var(--ok);background:#2ecc7120;color:var(--ok)}
+.step-line{flex:1;height:1px;background:var(--border);margin:0 6px}
+.step-line.done{background:var(--ok)}
+
+/* ── Auth page ── */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+.auth-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600&q=60');background-size:cover;background-position:center;filter:brightness(.22) saturate(.6)}
+.auth-box{position:relative;z-index:1;width:100%;max-width:430px}
+.auth-logo{text-align:center;margin-bottom:32px}
+.auth-logo .big{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;color:var(--gold-l);letter-spacing:3px}
+.auth-logo .sub{font-size:13px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.auth-card{background:rgba(26,24,20,.92);border:1px solid var(--border2);border-radius:18px;padding:34px 32px;backdrop-filter:blur(12px)}
+.tab-switcher{display:flex;gap:4px;background:var(--ink3);border-radius:9px;padding:4px;margin-bottom:24px}
+.tab-btn{flex:1;padding:8px 0;border:none;border-radius:7px;cursor:pointer;font-weight:600;font-size:14px;transition:var(--transition);background:transparent;color:var(--text3)}
+.tab-btn.active{background:var(--gold);color:var(--ink);box-shadow:0 4px 12px rgba(184,149,42,.4)}
+
+/* ── Hero & Filter ── */
+.hero{height:260px;background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1400&q=70');background-size:cover;background-position:center;position:relative;display:flex;align-items:flex-end;padding:0 40px 36px;flex-shrink:0}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(12,11,9,.92) 0%,rgba(12,11,9,.5) 60%,transparent 100%)}
+.hero-txt{position:relative;z-index:1}
+.hero-txt h1{font-size:40px;color:var(--gold-l);margin-bottom:6px}
+.hero-txt p{color:var(--text2);font-size:15px}
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:16px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+.pay-opt{padding:15px 18px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:var(--transition);margin-bottom:10px}
+.pay-opt.sel{border-color:var(--gold-l);background:rgba(184,149,42,.08)}
+.pay-opt:hover{border-color:var(--gold)}
+
+/* ── Responsive ── */
+@media(max-width:900px){.sidebar{width:200px}.grid4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+  .sidebar{position:fixed;left:-220px;z-index:500;transition:left .3s}.sidebar.open{left:0}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr}
+  .page-inner{padding:20px 16px}.hero{padding:0 20px 24px}.hero-txt h1{font-size:28px}.filter-bar{gap:8px}
+}
+</style>
+</head>
+<body>
+
+<!-- Toast container -->
+<div id="toast-wrap"></div>
+
+<!-- ╔═══════════════════════════════════╗
+     ║  NGƯỜI 1 — AUTH PAGE             ║
+     ╚═══════════════════════════════════╝ -->
+<div id="auth-page" class="auth-wrap">
+  <div class="auth-bg"></div>
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="big">VacayHome</div>
+      <div class="sub">Khách Sạn 5 Sao Đẳng Cấp</div>
+    </div>
+    <div class="auth-card">
+      <div class="tab-switcher">
+        <button class="tab-btn active" id="tab-login-btn" onclick="switchTab('login')">Đăng nhập</button>
+        <button class="tab-btn" id="tab-reg-btn" onclick="switchTab('register')">Đăng ký</button>
+      </div>
+      <div id="form-login">
+        <div class="form-group"><label class="label">Email</label><input class="input" id="li-email" type="email" placeholder="admin@hotel.com"></div>
+        <div class="form-group"><label class="label">Mật khẩu</label><input class="input" id="li-pwd" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <div id="li-err" class="hidden" style="color:#e74c3c;font-size:13px;padding:8px 12px;background:#e74c3c12;border-radius:8px;margin-bottom:14px"></div>
+        <button class="btn btn-gold btn-block" onclick="doLogin()">Đăng nhập</button>
+        <p style="text-align:center;font-size:11.5px;color:var(--text3);margin-top:14px">Demo Admin: <b>admin@hotel.com</b> / <b>admin123</b><br>Demo Khách: <b>user@hotel.com</b> / <b>user123</b></p>
+      </div>
+      <div id="form-register" class="hidden">
+        <div class="form-group"><label class="label">Họ và tên</label><input class="input" id="rg-name" type="text" placeholder="Nguyễn Văn A"></div>
+        <div class="form-group"><label class="label">Email</label><input class="input" id="rg-email" type="email" placeholder="email@example.com"></div>
+        <div class="form-group"><label class="label">Số điện thoại</label><input class="input" id="rg-phone" type="tel" placeholder="0901234567"></div>
+        <div class="form-group"><label class="label">Mật khẩu</label><input class="input" id="rg-pwd" type="password" placeholder="Ít nhất 6 ký tự"></div>
+        <div id="rg-err" class="hidden" style="color:#e74c3c;font-size:13px;padding:8px 12px;background:#e74c3c12;border-radius:8px;margin-bottom:14px"></div>
+        <button class="btn btn-gold btn-block" onclick="doRegister()">Tạo tài khoản</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  NGƯỜI 1 — APP SHELL (Sidebar + tất cả pages HTML)  ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="app" class="hidden" style="display:flex;min-height:100vh">
+
+  <!-- SIDEBAR — Người 1 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">Vacay<span>Home</span></div>
+    <div id="user-info" style="background:var(--ink3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:13px">
+      <div id="ui-name" style="font-weight:600;margin-bottom:2px"></div>
+      <div id="ui-role" class="text-dim"></div>
+    </div>
+    <div id="nav-client">
+      <button class="nav-item active" onclick="showPage('rooms')">🛏️ &nbsp;Danh sách phòng</button>
+      <button class="nav-item" onclick="showPage('my-bookings')">📅 &nbsp;Lịch sử đặt phòng</button>
+      <button class="nav-item" onclick="showPage('profile')">👤 &nbsp;Tài khoản</button>
+    </div>
+    <div id="nav-admin" class="hidden">
+      <button class="nav-item active" onclick="showPage('dashboard')">📊 &nbsp;Tổng quan</button>
+      <button class="nav-item" onclick="showPage('admin-rooms')">🛏️ &nbsp;Quản lý phòng</button>
+      <button class="nav-item" onclick="showPage('admin-cats')">🏷️ &nbsp;Danh mục phòng</button>
+      <button class="nav-item" onclick="showPage('admin-bookings')">📅 &nbsp;Quản lý đặt phòng</button>
+      <button class="nav-item" onclick="showPage('admin-users')">👥 &nbsp;Quản lý tài khoản</button>
+    </div>
+    <div style="flex:1"></div>
+    <button class="nav-item" style="color:var(--err)" onclick="doLogout()">🚪 &nbsp;Đăng xuất</button>
+  </aside>
+
+  <main style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+
+    <!-- ── Client: Rooms (Người 1 HTML / Người 3 JS) ── -->
+    <div id="page-rooms" class="page active">
+      <div class="hero"><div class="hero-txt"><h1>Chào mừng trở lại ✦</h1><p>Khám phá không gian nghỉ dưỡng đẳng cấp dành riêng cho bạn</p></div></div>
+      <div class="filter-bar">
+        <div class="input-icon" style="flex:1;min-width:180px"><span class="ico">🔍</span><input class="input" id="room-search" placeholder="Tìm kiếm phòng..." oninput="renderRooms()"></div>
+        <select class="input" id="room-cat-filter" style="width:180px" onchange="renderRooms()"><option value="">Tất cả danh mục</option></select>
+        <select class="input" id="room-price-filter" style="width:170px" onchange="renderRooms()">
+          <option value="">Tất cả mức giá</option>
+          <option value="low">Dưới 1.5 triệu</option>
+          <option value="mid">1.5 – 4 triệu</option>
+          <option value="high">Trên 4 triệu</option>
+        </select>
+      </div>
+      <div class="page-inner"><div id="rooms-count" class="text-dim mb16"></div><div id="rooms-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px"></div></div>
+    </div>
+
+    <!-- ── Client: My Bookings (Người 1 HTML / Người 4 JS) ── -->
+    <div id="page-my-bookings" class="page">
+      <div class="page-inner">
+        <div class="page-hd"><div><h2>Lịch sử đặt phòng</h2><p>Tất cả đặt phòng của bạn</p></div></div>
+        <div id="my-bookings-list"></div>
+      </div>
+    </div>
+
+    <!-- ── Client: Profile (Người 1 HTML+JS) ── -->
+    <div id="page-profile" class="page">
+      <div class="page-inner" style="max-width:520px">
+        <div class="page-hd"><div><h2>Tài khoản của tôi</h2><p>Thông tin cá nhân</p></div></div>
+        <div class="card card-pad">
+          <div id="profile-avatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-l));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:22px"></div>
+          <div class="form-group"><label class="label">Họ và tên</label><input class="input" id="pf-name"></div>
+          <div class="form-group"><label class="label">Email (không thể đổi)</label><input class="input" id="pf-email" disabled style="opacity:.5"></div>
+          <div class="form-group"><label class="label">Số điện thoại</label><input class="input" id="pf-phone"></div>
+          <div class="form-group"><label class="label">Mật khẩu mới (bỏ trống nếu không đổi)</label><input class="input" id="pf-pwd" type="password" placeholder="••••••••"></div>
+          <button class="btn btn-gold" onclick="saveProfile()">✅ &nbsp;Lưu thay đổi</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Admin: Dashboard (Người 1 HTML+JS) ── -->
+    <div id="page-dashboard" class="page">
+      <div class="page-inner">
+        <div class="page-hd"><div><h2>Tổng quan</h2><p>Hệ thống quản lý khách sạn</p></div></div>
+        <div class="grid4 mb16" id="dash-stats"></div>
+        <div class="grid2">
+          <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:18px">Đặt phòng gần đây</h3><div id="dash-recent"></div></div>
+          <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:18px">Tình trạng phòng</h3><div id="dash-room-status"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Admin: Rooms (Người 1 HTML / Người 3 JS) ── -->
+    <div id="page-admin-rooms" class="page">
+      <div class="page-inner">
+        <div class="page-hd"><div><h2>Quản lý phòng</h2><p id="admin-rooms-count"></p></div><button class="btn btn-gold" onclick="openRoomModal()">➕ &nbsp;Thêm phòng</button></div>
+        <div style="margin-bottom:14px"><input class="input" id="ar-search" style="max-width:300px" placeholder="🔍  Tìm phòng..." oninput="renderAdminRooms()"></div>
+        <div class="table-wrap"><table><thead><tr><th>Phòng</th><th>Danh mục</th><th>Giá/đêm</th><th>Sức chứa</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="admin-rooms-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ── Admin: Categories (Người 1 HTML / Người 3 JS) ── -->
+    <div id="page-admin-cats" class="page">
+      <div class="page-inner">
+        <div class="page-hd"><div><h2>Danh mục phòng</h2><p id="admin-cats-count"></p></div><button class="btn btn-gold" onclick="openCatModal()">➕ &nbsp;Thêm danh mục</button></div>
+        <div id="cats-grid" class="grid3"></div>
+      </div>
+    </div>
+
+    <!-- ── Admin: Bookings (Người 1 HTML / Người 4 JS) ── -->
+    <div id="page-admin-bookings" class="page">
+      <div class="page-inner">
+        <div class="page-hd"><div><h2>Quản lý đặt phòng</h2><p id="admin-bk-count"></p></div></div>
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+          <input class="input" id="ab-search" style="max-width:280px" placeholder="🔍  Tìm khách, phòng..." oninput="renderAdminBookings()">
+          <select class="input" id="ab-filter" style="width:180px" onchange="renderAdminBookings()">
+            <option value="">Tất cả trạng thái</option>
+            <option value="pending">Chờ xác nhận</option>
+            <option value="confirmed">Đã xác nhận</option>
+            <option value="checked_in">Đang ở</option>
+            <option value="checked_out">Đã trả phòng</option>
+            <option value="cancelled">Đã hủy</option>
+          </select>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Khách hàng</th><th>Phòng</th><th>Ngày</th><th>Tổng tiền</th><th>TT thanh toán</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="admin-bk-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ── Admin: Users (Người 1 HTML / Người 2 JS) ── -->
+    <div id="page-admin-users" class="page">
+      <div class="page-inner">
+        <div class="page-hd"><div><h2>Quản lý tài khoản</h2><p id="admin-users-count"></p></div><button class="btn btn-gold" onclick="openUserModal()">➕ &nbsp;Thêm tài khoản</button></div>
+        <div style="margin-bottom:14px"><input class="input" id="au-search" style="max-width:300px" placeholder="🔍  Tìm tài khoản..." oninput="renderAdminUsers()"></div>
+        <div class="table-wrap"><table><thead><tr><th>Tên</th><th>Email</th><th>Điện thoại</th><th>Vai trò</th><th>Ngày tạo</th><th>Thao tác</th></tr></thead><tbody id="admin-users-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ╔══════════════════════════════════════╗
+     ║  MODALS (markup — Người 1)           ║
+     ╚══════════════════════════════════════╝ -->
+
+<!-- Booking Modal — Người 4 JS -->
+<div id="modal-booking" class="overlay" onclick="if(event.target===this)closeModal('modal-booking')">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-hd"><h3 class="modal-title serif" id="bk-modal-title">Đặt phòng</h3><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-booking')">✕</button></div>
+    <div class="modal-bd">
+      <div class="steps" id="bk-steps">
+        <div class="step active" id="st1"><div class="step-dot">1</div><span>Thông tin</span></div>
+        <div class="step-line" id="sl1"></div>
+        <div class="step" id="st2"><div class="step-dot">2</div><span>Thanh toán</span></div>
+        <div class="step-line" id="sl2"></div>
+        <div class="step" id="st3"><div class="step-dot">3</div><span>Xác nhận</span></div>
+      </div>
+      <div id="bk-step1">
+        <div class="flex gap12 mb16" style="background:var(--ink3);border-radius:10px;padding:14px">
+          <img id="bk-room-img" src="" alt="" style="width:80px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0">
+          <div><div id="bk-room-name" class="fw600" style="margin-bottom:3px"></div><div id="bk-room-price" class="text-gold fw600"></div></div>
+        </div>
+        <div class="grid2">
+          <div class="form-group"><label class="label">Ngày nhận phòng</label><input class="input" id="bk-ci" type="date"></div>
+          <div class="form-group"><label class="label">Ngày trả phòng</label><input class="input" id="bk-co" type="date"></div>
+        </div>
+        <div class="form-group"><label class="label">Số khách</label><input class="input" id="bk-guests" type="number" min="1" value="1"></div>
+        <div class="form-group"><label class="label">Ghi chú đặc biệt</label><textarea class="input" id="bk-note" placeholder="Yêu cầu đặc biệt..."></textarea></div>
+        <div class="price-display mb16">
+          <div class="flex" style="justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px"><span id="bk-price-formula"></span><span id="bk-subtotal"></span></div>
+          <div class="divider" style="margin:10px 0"></div>
+          <div class="flex" style="justify-content:space-between;font-size:18px;font-weight:700"><span>Tổng cộng</span><span class="text-gold" id="bk-total"></span></div>
+        </div>
+        <button class="btn btn-gold btn-block" onclick="bkNext(2)">Tiếp tục → Thanh toán</button>
+      </div>
+      <div id="bk-step2" class="hidden">
+        <p class="text-dim mb16">Chọn phương thức thanh toán</p>
+        <div class="pay-opt" id="pay-card" onclick="selectPay('card')"><div class="fw600 mb4">💳 &nbsp;Thẻ tín dụng / Ghi nợ</div><div class="text-dim text-sm">Visa, Mastercard, JCB – Thanh toán ngay</div></div>
+        <div class="pay-opt" id="pay-transfer" onclick="selectPay('transfer')"><div class="fw600 mb4">🏦 &nbsp;Chuyển khoản ngân hàng</div><div class="text-dim text-sm">Chuyển khoản trực tiếp qua app ngân hàng</div></div>
+        <div class="pay-opt" id="pay-cash" onclick="selectPay('cash')"><div class="fw600 mb4">💵 &nbsp;Thanh toán tại quầy</div><div class="text-dim text-sm">Thanh toán bằng tiền mặt khi nhận phòng</div></div>
+        <div class="flex gap10 mt16">
+          <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="bkNext(1)">← Quay lại</button>
+          <button class="btn btn-gold" style="flex:2;justify-content:center" onclick="bkNext(3)">Xem xác nhận →</button>
+        </div>
+      </div>
+      <div id="bk-step3" class="hidden">
+        <div style="background:rgba(184,149,42,.1);border:1px solid rgba(184,149,42,.3);border-radius:12px;padding:20px;margin-bottom:18px" id="bk-confirm-detail"></div>
+        <div class="flex gap10">
+          <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="bkNext(2)">← Quay lại</button>
+          <button class="btn btn-gold" style="flex:2;justify-content:center;padding:13px 0" onclick="confirmBooking()">✅ &nbsp;Xác nhận đặt phòng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Room Modal — Người 3 JS -->
+<div id="modal-room" class="overlay" onclick="if(event.target===this)closeModal('modal-room')">
+  <div class="modal">
+    <div class="modal-hd"><h3 class="modal-title serif" id="room-modal-title">Phòng</h3><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-room')">✕</button></div>
+    <div class="modal-bd">
+      <div class="form-group"><label class="label">Tên phòng</label><input class="input" id="rm-name" placeholder="VD: Phòng Deluxe 201"></div>
+      <div class="grid2">
+        <div class="form-group"><label class="label">Danh mục</label><select class="input" id="rm-cat"></select></div>
+        <div class="form-group"><label class="label">Giá / đêm (VNĐ)</label><input class="input" id="rm-price" type="number" placeholder="1500000"></div>
+        <div class="form-group"><label class="label">Sức chứa (người)</label><input class="input" id="rm-cap" type="number" min="1" value="2"></div>
+        <div class="form-group"><label class="label">Diện tích (m²)</label><input class="input" id="rm-size" type="number" value="30"></div>
+        <div class="form-group"><label class="label">Tầng</label><input class="input" id="rm-floor" type="number" min="1" value="1"></div>
+        <div class="form-group"><label class="label">Trạng thái</label>
+          <select class="input" id="rm-status"><option value="available">Còn trống</option><option value="occupied">Đã đặt</option><option value="maintenance">Bảo trì</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="label">Tiện nghi (cách nhau bởi dấu phẩy)</label><input class="input" id="rm-amenities" placeholder="WiFi, AC, TV, Mini Bar, Bathtub"></div>
+      <div class="form-group"><label class="label">URL ảnh đại diện</label><input class="input" id="rm-img" placeholder="https://..."></div>
+      <div class="form-group"><label class="label">Mô tả</label><textarea class="input" id="rm-desc" placeholder="Mô tả phòng..."></textarea></div>
+      <div class="flex gap10" style="justify-content:flex-end"><button class="btn btn-outline" onclick="closeModal('modal-room')">Hủy</button><button class="btn btn-gold" onclick="saveRoom()">💾 &nbsp;Lưu phòng</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Category Modal — Người 3 JS -->
+<div id="modal-cat" class="overlay" onclick="if(event.target===this)closeModal('modal-cat')">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-hd"><h3 class="modal-title serif" id="cat-modal-title">Danh mục</h3><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-cat')">✕</button></div>
+    <div class="modal-bd">
+      <div class="form-group"><label class="label">Icon (emoji)</label><input class="input" id="ct-icon" placeholder="🛏️" style="font-size:22px;text-align:center"></div>
+      <div class="form-group"><label class="label">Tên danh mục</label><input class="input" id="ct-name" placeholder="VD: Phòng Suite"></div>
+      <div class="form-group"><label class="label">Mô tả</label><textarea class="input" id="ct-desc" placeholder="Mô tả danh mục..."></textarea></div>
+      <div class="flex gap10" style="justify-content:flex-end"><button class="btn btn-outline" onclick="closeModal('modal-cat')">Hủy</button><button class="btn btn-gold" onclick="saveCat()">💾 &nbsp;Lưu</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- User Modal — Người 2 JS -->
+<div id="modal-user" class="overlay" onclick="if(event.target===this)closeModal('modal-user')">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-hd"><h3 class="modal-title serif" id="user-modal-title">Tài khoản</h3><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-user')">✕</button></div>
+    <div class="modal-bd">
+      <div class="form-group"><label class="label">Họ và tên</label><input class="input" id="um-name"></div>
+      <div class="form-group"><label class="label">Email</label><input class="input" id="um-email" type="email"></div>
+      <div class="form-group"><label class="label">Số điện thoại</label><input class="input" id="um-phone"></div>
+      <div class="form-group"><label class="label">Mật khẩu</label><input class="input" id="um-pwd" type="password" placeholder="Để trống = không đổi"></div>
+      <div class="form-group"><label class="label">Vai trò</label><select class="input" id="um-role"><option value="client">Khách hàng</option><option value="admin">Admin</option></select></div>
+      <div class="flex gap10" style="justify-content:flex-end"><button class="btn btn-outline" onclick="closeModal('modal-user')">Hủy</button><button class="btn btn-gold" onclick="saveUser()">💾 &nbsp;Lưu</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Room Detail Modal — Người 3 JS -->
+<div id="modal-room-detail" class="overlay" onclick="if(event.target===this)closeModal('modal-room-detail')">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-hd"><h3 class="modal-title serif" id="rd-name">Chi tiết phòng</h3><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-room-detail')">✕</button></div>
+    <div class="modal-bd">
+      <img id="rd-img" src="" alt="" style="width:100%;height:220px;object-fit:cover;border-radius:10px;margin-bottom:18px">
+      <div class="grid2 mb12">
+        <div><span class="label">Danh mục</span><div id="rd-cat"></div></div>
+        <div><span class="label">Giá/đêm</span><div id="rd-price" class="text-gold fw600" style="font-size:20px"></div></div>
+        <div><span class="label">Sức chứa</span><div id="rd-cap"></div></div>
+        <div><span class="label">Diện tích</span><div id="rd-size"></div></div>
+        <div><span class="label">Tầng</span><div id="rd-floor"></div></div>
+        <div><span class="label">Trạng thái</span><div id="rd-status"></div></div>
+      </div>
+      <div class="form-group"><div class="label">Mô tả</div><p id="rd-desc" style="color:var(--text2);font-size:14px;line-height:1.7"></p></div>
+      <div class="form-group"><div class="label">Tiện nghi</div><div id="rd-amenities" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
+      <div class="mt16"><button class="btn btn-gold btn-block" id="rd-book-btn" onclick="bookFromDetail()">📅 &nbsp;Đặt phòng ngay</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔═════════════════════════════════════════════════════╗
+     ║  SCRIPTS — Thứ tự load BẮT BUỘC                    ║
+     ║  1. database.js (Người 4) — DB, state, helpers      ║
+     ║  2. rooms.js    (Người 3) — phòng + danh mục        ║
+     ║  3. users.js    (Người 2) — tài khoản               ║
+     ║  4. ui.js (inline bên dưới) — Người 1 JS            ║
+     ╚═════════════════════════════════════════════════════╝ -->
+<script src="js/database.js"></script>
+<script src="js/rooms.js"></script>
+<script src="js/users.js"></script>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  NGƯỜI 1 — JS: Auth · Navigation · Dashboard    ║
+     ╚══════════════════════════════════════════════════╝ -->
+<script>
+// ── Toast & Modal (shared utilities) ──────────────────
+function toast(msg,type='ok'){
+  const w=document.getElementById('toast-wrap');
+  const el=document.createElement('div');
+  el.className=`toast toast-${type}`;
+  el.innerHTML=`<span style="flex:1">${msg}</span><span onclick="this.parentElement.remove()" style="cursor:pointer;opacity:.7;font-size:18px;line-height:1">×</span>`;
+  w.appendChild(el);
+  setTimeout(()=>{el.style.animation='toastOut .3s ease forwards';setTimeout(()=>el.remove(),300)},3500);
+}
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+// ── Auth ──────────────────────────────────────────────
+function switchTab(t){
+  document.getElementById('form-login').classList.toggle('hidden',t!=='login');
+  document.getElementById('form-register').classList.toggle('hidden',t!=='register');
+  document.getElementById('tab-login-btn').classList.toggle('active',t==='login');
+  document.getElementById('tab-reg-btn').classList.toggle('active',t==='register');
+  document.getElementById('li-err').classList.add('hidden');
+  document.getElementById('rg-err').classList.add('hidden');
+}
+
+function doLogin(){
+  const email=document.getElementById('li-email').value.trim();
+  const pwd=document.getElementById('li-pwd').value;
+  const u=(DB.get('vh_users')||[]).find(x=>x.email===email&&x.password===pwd);
+  const errEl=document.getElementById('li-err');
+  if(!u){errEl.textContent='Email hoặc mật khẩu không đúng';errEl.classList.remove('hidden');return;}
+  errEl.classList.add('hidden');
+  currentUser=u; DB.set('vh_currentUser',u); enterApp();
+}
+
+function doRegister(){
+  const name=document.getElementById('rg-name').value.trim();
+  const email=document.getElementById('rg-email').value.trim();
+  const phone=document.getElementById('rg-phone').value.trim();
+  const pwd=document.getElementById('rg-pwd').value;
+  const errEl=document.getElementById('rg-err');
+  if(!name||!email||!pwd){errEl.textContent='Vui lòng điền đầy đủ thông tin';errEl.classList.remove('hidden');return;}
+  if(pwd.length<6){errEl.textContent='Mật khẩu ít nhất 6 ký tự';errEl.classList.remove('hidden');return;}
+  const users=DB.get('vh_users')||[];
+  if(users.find(u=>u.email===email)){errEl.textContent='Email đã tồn tại';errEl.classList.remove('hidden');return;}
+  const newU={id:uid(),name,email,phone,password:pwd,role:'client',createdAt:today()};
+  DB.set('vh_users',[...users,newU]);
+  currentUser=newU; DB.set('vh_currentUser',newU); errEl.classList.add('hidden'); enterApp();
+}
+
+function doLogout(){
+  currentUser=null; DB.set('vh_currentUser',null);
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('auth-page').style.display='flex';
+  document.getElementById('li-email').value=''; document.getElementById('li-pwd').value='';
+}
+
+function enterApp(){
+  document.getElementById('auth-page').style.display='none';
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('app').style.display='flex';
+  document.getElementById('ui-name').textContent=currentUser.name;
+  document.getElementById('ui-role').textContent=currentUser.role==='admin'?'👑 Quản trị viên':'👤 Khách hàng';
+  document.getElementById('nav-client').classList.toggle('hidden',currentUser.role==='admin');
+  document.getElementById('nav-admin').classList.toggle('hidden',currentUser.role!=='admin');
+  populateCatSelects();
+  if(currentUser.role==='admin') showPage('dashboard');
+  else showPage('rooms');
+}
+
+// ── Navigation ────────────────────────────────────────
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')===`showPage('${name}')`||n.onclick?.toString().includes(`'${name}'`)) n.classList.add('active');
+  });
+  const fns={rooms:renderRooms,'my-bookings':renderMyBookings,profile:renderProfile,
+    dashboard:renderDashboard,'admin-rooms':renderAdminRooms,
+    'admin-cats':renderAdminCats,'admin-bookings':renderAdminBookings,'admin-users':renderAdminUsers};
+  if(fns[name]) fns[name]();
+}
+
+// ── Dashboard ─────────────────────────────────────────
+function renderDashboard(){
+  const rooms=DB.get('vh_rooms')||[], bookings=DB.get('vh_bookings')||[], users=DB.get('vh_users')||[];
+  const revenue=bookings.filter(b=>b.pay==='paid').reduce((s,b)=>s+b.total,0);
+  const activeB=bookings.filter(b=>['confirmed','checked_in'].includes(b.status)).length;
+  document.getElementById('dash-stats').innerHTML=[
+    {icon:'🛏️',val:rooms.length,lbl:'Tổng số phòng',sub:`${rooms.filter(r=>r.status==='available').length} còn trống`,col:'#3b82f6'},
+    {icon:'📅',val:activeB,lbl:'Đặt phòng hoạt động',sub:`Tổng ${bookings.length} đặt phòng`,col:'#2ecc71'},
+    {icon:'💰',val:fmt(revenue),lbl:'Doanh thu',sub:'Từ các đặt phòng đã thanh toán',col:'var(--gold-l)'},
+    {icon:'👥',val:users.filter(u=>u.role==='client').length,lbl:'Khách hàng',sub:'Tài khoản đã đăng ký',col:'#9b59b6'},
+  ].map(s=>`<div class="stat"><div class="stat-icon">${s.icon}</div><div class="stat-val" style="color:${s.col}">${esc(String(s.val))}</div><div class="stat-lbl">${s.lbl}</div><div class="stat-sub">${s.sub}</div></div>`).join('');
+  const recent=bookings.slice(-5).reverse();
+  document.getElementById('dash-recent').innerHTML=`<table><thead><tr><th>Phòng</th><th>Check-in</th><th>Trạng thái</th></tr></thead><tbody>${recent.map(b=>{const r=getRoom(b.rid);return`<tr><td>${esc(r?.name||'—')}</td><td>${b.ci}</td><td>${badge(b.status)}</td></tr>`;}).join('')}</tbody></table>`;
+  document.getElementById('dash-room-status').innerHTML=['available','occupied','maintenance'].map(s=>{
+    const cnt=rooms.filter(r=>r.status===s).length;
+    const pct=rooms.length?Math.round(cnt/rooms.length*100):0;
+    const cols={available:'var(--ok)',occupied:'var(--err)',maintenance:'var(--warn)'};
+    return`<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px"><span>${SL[s]}</span><span style="color:var(--text2)">${cnt} phòng (${pct}%)</span></div><div class="progress"><div class="progress-bar" style="width:${pct}%;background:${cols[s]}"></div></div></div>`;
+  }).join('');
+}
+
+// ── Profile (Client) ──────────────────────────────────
+function renderProfile(){
+  document.getElementById('pf-name').value=currentUser.name||'';
+  document.getElementById('pf-email').value=currentUser.email||'';
+  document.getElementById('pf-phone').value=currentUser.phone||'';
+  document.getElementById('pf-pwd').value='';
+  document.getElementById('profile-avatar').textContent=(currentUser.name||'U').charAt(0).toUpperCase();
+}
+function saveProfile(){
+  const name=document.getElementById('pf-name').value.trim();
+  const phone=document.getElementById('pf-phone').value.trim();
+  const pwd=document.getElementById('pf-pwd').value;
+  if(!name){toast('Vui lòng nhập họ tên','err');return;}
+  const users=DB.get('vh_users')||[];
+  DB.set('vh_users',users.map(u=>u.id!==currentUser.id?u:{...u,name,phone,...(pwd?{password:pwd}:{})}));
+  currentUser={...currentUser,name,phone,...(pwd?{password:pwd}:{})};
+  DB.set('vh_currentUser',currentUser);
+  document.getElementById('ui-name').textContent=name;
+  document.getElementById('profile-avatar').textContent=name.charAt(0).toUpperCase();
+  toast('Cập nhật thành công!','ok');
+}
+
+// ── App Init ──────────────────────────────────────────
+DB.seed();
+const _s=DB.get('vh_currentUser');
+if(_s&&_s.id){
+  currentUser=_s;
+  document.getElementById('auth-page').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('ui-name').textContent=currentUser.name;
+  document.getElementById('ui-role').textContent=currentUser.role==='admin'?'👑 Quản trị viên':'👤 Khách hàng';
+  document.getElementById('nav-client').classList.toggle('hidden',currentUser.role==='admin');
+  document.getElementById('nav-admin').classList.toggle('hidden',currentUser.role!=='admin');
+  populateCatSelects();
+  if(currentUser.role==='admin') showPage('dashboard');
+  else showPage('rooms');
+}
+</script>
+</body>
+</html>
